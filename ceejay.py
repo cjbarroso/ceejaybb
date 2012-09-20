@@ -3,10 +3,11 @@ from ircutils import bot
 from trellocards import TrelloQuerier
 
 from local_settings import *
-
+import os
 import logging
+import logging.handlers
 
-LOG_DEST="/home/huevodrop/irclogs/machinalis-cpi.log"
+LOG_DEST=os.path.expanduser("~/irclogs/machinalis-cpi.log")
 
 class TrelloBot(bot.SimpleBot):
 
