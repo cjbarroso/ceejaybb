@@ -19,7 +19,7 @@ class TrelloBot(bot.SimpleBot):
         self.join(CANAL)
 
     def on_channel_message(self, event):
-        logging.debug(event.message)
+        logging.debug("<%s> %s" % (event.source, event.message))
         m = re.findall("\s(:\d+)", event.message)
         for e in m:
             jeje = self.querier.buscar_carta(e)
