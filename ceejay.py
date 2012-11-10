@@ -123,9 +123,15 @@ class TrelloBot(bot.SimpleBot):
         if len(destino) == 1:
             destino = destino[0]
 
+        # por defecto al canal
+        receptor = self.db['canal']
+
+        if kwargs.has_key("privado") and destino != "":
+            receptor = destino
+
         if not self.mudo:
             self.send_message(
-                    self.db['canal'],
+                    receptor,
                     "%s: %s" % (
                         destino,
                         kwargs['mensaje']
@@ -178,7 +184,8 @@ class TrelloBot(bot.SimpleBot):
 
             self.decir(
                     mensaje="%s -> %s" % (e, v),
-                    event=kwargs['event']
+                    event=kwargs['event'],
+                    privado=True
                     )
 
     def extrae_primer_linea_docstring(self, funcion):
@@ -197,7 +204,8 @@ class TrelloBot(bot.SimpleBot):
                         str(i)[14:],
                         self.extrae_primer_linea_docstring(i)
                         ),
-                    event=kwargs['event']
+                    event=kwargs['event'],
+                    privado=True
                     )
             # para evitar baneo del ircserver
             time.sleep(0.5)
@@ -459,23 +467,4 @@ class TrelloBot(bot.SimpleBot):
 
     # triggers de la libreria IRC }}}
 
-
-if __name__ == "__main__":
-    LOGGING_DATE_FORMAT     = '%Y%m%d'
-    logging.basicConfig(
-            level = logging.DEBUG,
-            datefmt=LOGGING_DATE_FORMAT
-            )
-    root_logger = logging.getLogger('')
-    logger = logging.handlers.TimedRotatingFileHandler(LOG_DEST,
-            "midnight", 1)
-    root_logger.addHandler(logger)
-    # Create an instance of the bot
-    trello_bot = TrelloBot()
-    trello_bot.conectarse()
-    trello_bot.identificacion_nickserv()
-
-    # Start running the bot
-    trello_bot.start()
-
-# vim: foldmethod=marker ts=4 sw=4 expandtab
+# vim: foldmethod=marker ts=4 sw=4 syn=python expandtab
